@@ -88,3 +88,74 @@ function doMerge(
         mainArray[k++] = auxiliaryArray[j++];
     }
 }
+
+export function selectionSort(array){
+    const animations = [];
+    if (array.length === 1){
+        return array;
+    }
+    const auxArray = array;
+    let i = 0;
+
+    while (i < auxArray.length){
+        let smallestIndex = i;
+        for (let j = i; j < auxArray.length; j++){
+            if (auxArray[j] < auxArray[smallestIndex]){
+                smallestIndex = j;
+            }
+            animations.push({
+                type: 'comp',
+                values: [i, j]
+            });
+        }
+        animations.push({
+            type: 'swap',
+            values: [i, smallestIndex]
+        });
+        let temp = auxArray[i];
+        auxArray[i] = auxArray[smallestIndex];
+        auxArray[smallestIndex] = temp;
+        i++;
+        // const animation = {};
+        // animation.swap = [i, auxArray[smallestIndex]];
+        // animations.push(animation);
+        
+    }
+
+    return animations;
+}
+
+export function bubbleSort(array){
+    const animations = [];
+    if (array.length === 1){
+        return array;
+    }
+
+    let sorted = false;
+
+    while (!sorted){
+        let swapOccured = false;
+        for (let i = 0; i < array.length - 1; i++){
+            animations.push({
+                type: 'comp',
+                values: [i, i + 1]
+            });
+            if (array[i] > array[i + 1]){
+                animations.push({
+                    type: 'swap',
+                    values: [i, i + 1]
+                });
+                let temp = array[i];
+                array[i] = array[i + 1];
+                array[i + 1] = temp;
+                swapOccured = true;
+            }
+        }
+        if (!swapOccured){
+            sorted = true;
+        }
+    }
+
+    return animations;
+
+}
