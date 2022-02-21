@@ -7,7 +7,7 @@ export default class SortVisualizer extends React.Component{
         super(props);
         this.state = {
             array: [],
-            speed: 2
+            speed: 1
         };
     }
 
@@ -19,7 +19,7 @@ export default class SortVisualizer extends React.Component{
         const array = [];
         //2 or 20 for width
         //380 or 70 for bars
-        for (let i = 0; i < 380; i++){
+        for (let i = 0; i < 381; i++){
             array.push(randomIntFromInterval(5, 730));
         }
         this.setState({array});
@@ -33,25 +33,62 @@ export default class SortVisualizer extends React.Component{
             newAnimations.push(animation.comparison);
             newAnimations.push(animation.swap);
         }
+        let modControl = 0;
+        for (let i = 0; i < this.state.array.length; i++){
+            newAnimations.push([i, -1]);
+            // newAnimations.push([i, -1]);
+            // newAnimations.push([i, -1]);
+            if (modControl % 3 === 2){
+                i--;
+                modControl = 0;
+            }
+            else{
+                modControl++;
+            }
+        }
+        // modControl = 0;
+        for (let i = this.state.array.length - 1; i >= 0; i--){
+            newAnimations.push([i, -2]);
+            // newAnimations.push([i, -2]);
+            // newAnimations.push([i, -2]);
+            if (modControl % 3 === 2){
+                i++;
+                modControl = 0;
+            }
+            else{
+                modControl++;
+            }
+        }
         for (let i = 0; i < newAnimations.length; i++){
             const arrayBars = document.getElementsByClassName('array-bar');
             const isColorChange = (i % 3 !== 2);
             if (isColorChange){
                 const [bar1Index, bar2Index] = newAnimations[i];
-                const bar1Style = arrayBars[bar1Index].style;
-                const bar2Style = arrayBars[bar2Index].style;
-                const color = i % 3 === 0 ? 'red' : 'blueviolet';
-                setTimeout(() => {
-                    bar1Style.backgroundColor = color;
-                    bar2Style.backgroundColor = color;
-                }, i * this.state.speed);
+                if (bar2Index >= 0){
+                    const bar1Style = arrayBars[bar1Index].style;
+                    const bar2Style = arrayBars[bar2Index].style;
+                    const color = i % 3 === 0 ? 'red' : 'blueviolet';
+                    setTimeout(() => {
+                        bar1Style.backgroundColor = color;
+                        bar2Style.backgroundColor = color;
+                    }, i * this.state.speed);
+                }
+                else{
+                    const bar1Style = arrayBars[bar1Index].style;
+                    const color = (bar2Index === -1) ? 'aquamarine' : 'blueviolet';
+                    setTimeout(() => {
+                        bar1Style.backgroundColor = color;
+                    }, i * this.state.speed);
+                }
             }
             else{
-                setTimeout(() => {
-                    const [bar1Index, newHeight] = newAnimations[i];
-                    const bar1Style = arrayBars[bar1Index].style;
-                    bar1Style.height = `${newHeight}px`;
-                }, i * this.state.speed);
+                const [bar1Index, newHeight] = newAnimations[i];
+                if (newHeight >= 0){
+                    setTimeout(() => {
+                        const bar1Style = arrayBars[bar1Index].style;
+                        bar1Style.height = `${newHeight}px`;
+                    }, i * this.state.speed);
+                }
             }
         }
     }
