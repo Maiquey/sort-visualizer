@@ -7,7 +7,7 @@ export default class SortVisualizer extends React.Component{
         super(props);
         this.state = {
             array: [],
-            speed: 0.1
+            speed: 2
         };
     }
 
@@ -54,26 +54,94 @@ export default class SortVisualizer extends React.Component{
                 }, i * this.state.speed);
             }
         }
-
-
-
-        // for (let i = 0; i < animations.length; i++){
-        //     const {comparison, swap} = animations[i];
-        //     setTimeout(() => {
-        //         const arrayBars = document.getElementsByClassName('array-bar');
-        //         arrayBars[comparison[1]].style.backgroundColor = 'red';
-        //         arrayBars[comparison[0]].style.backgroundColor = 'red';
-        //         setTimeout(() => {
-        //             arrayBars[comparison[1]].style.backgroundColor = 'blueviolet';
-        //             arrayBars[comparison[0]].style.backgroundColor = 'blueviolet';
-        //         }, (i + 1) * 10);
-        //     }, i * 10);
-        // }
     }
 
-    quickSort(){}
+    quickSort(){
+        const sourceAnimations = sortingAlgorithms.quickSort(this.state.array);
+        const animations = [];
+        for (const animation of sourceAnimations){
+            if (animation.type === 'comp'){
+                animations.push(animation);
+                const [index1, index2] = animation.values;
+                animations.push({
+                    type: 'clear',
+                    values: [index1, index2]
+                });
+            }
+            else{
+                animations.push(animation);
+            }
+        }
+        console.log(animations);
+        for (let i = 0; i < animations.length; i++){
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = (animations[i].type !== 'swap');
+            if (isColorChange){
+                const [bar1Index, bar2Index] = animations[i].values;
+                const bar1Style = arrayBars[bar1Index].style;
+                const bar2Style = arrayBars[bar2Index].style;
+                const color = (animations[i].type === 'comp') ? 'red' : 'blueviolet';
+                const color2 = (animations[i].type === 'check') ? 'aquamarine' : color;
+                setTimeout(() => {
+                    bar1Style.backgroundColor = color2;
+                    bar2Style.backgroundColor = color2;
+                }, i * this.state.speed);
+            }
+            else{
+                setTimeout(() => {
+                    const [bar1Index, bar2Index] = animations[i].values;
+                    const bar1Style = arrayBars[bar1Index].style;
+                    const bar2Style = arrayBars[bar2Index].style;
+                    const tempHeight = bar1Style.height;
+                    bar1Style.height = bar2Style.height;
+                    bar2Style.height = tempHeight;
+                }, i * this.state.speed);
+            }
+        }
+    }
 
-    heapSort(){}
+    heapSort(){
+        const sourceAnimations = sortingAlgorithms.heapSort(this.state.array);
+        const animations = [];
+        for (const animation of sourceAnimations){
+            if (animation.type === 'comp'){
+                animations.push(animation);
+                const [index1, index2] = animation.values;
+                animations.push({
+                    type: 'clear',
+                    values: [index1, index2]
+                });
+            }
+            else{
+                animations.push(animation);
+            }
+        }
+        for (let i = 0; i < animations.length; i++){
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = (animations[i].type !== 'swap');
+            if (isColorChange){
+                const [bar1Index, bar2Index] = animations[i].values;
+                const bar1Style = arrayBars[bar1Index].style;
+                const bar2Style = arrayBars[bar2Index].style;
+                const color = (animations[i].type === 'comp') ? 'red' : 'blueviolet';
+                const color2 = (animations[i].type === 'check') ? 'aquamarine' : color;
+                setTimeout(() => {
+                    bar1Style.backgroundColor = color2;
+                    bar2Style.backgroundColor = color2;
+                }, i * this.state.speed);
+            }
+            else{
+                setTimeout(() => {
+                    const [bar1Index, bar2Index] = animations[i].values;
+                    const bar1Style = arrayBars[bar1Index].style;
+                    const bar2Style = arrayBars[bar2Index].style;
+                    const tempHeight = bar1Style.height;
+                    bar1Style.height = bar2Style.height;
+                    bar2Style.height = tempHeight;
+                }, i * this.state.speed);
+            }
+        }
+    }
 
     bubbleSort(){
         const sourceAnimations = sortingAlgorithms.bubbleSort(this.state.array);
@@ -99,10 +167,11 @@ export default class SortVisualizer extends React.Component{
                 const bar1Style = arrayBars[bar1Index].style;
                 const bar2Style = arrayBars[bar2Index].style;
                 const color = (animations[i].type === 'comp') ? 'red' : 'blueviolet';
+                const color2 = (animations[i].type === 'check') ? 'aquamarine' : color;
                 setTimeout(() => {
-                    bar1Style.backgroundColor = color;
-                    bar2Style.backgroundColor = color;
-                }, i * this.state.speed);
+                    bar1Style.backgroundColor = color2;
+                    bar2Style.backgroundColor = color2;
+                }, i * 0.1);
             }
             else{
                 setTimeout(() => {
@@ -112,7 +181,7 @@ export default class SortVisualizer extends React.Component{
                     const tempHeight = bar1Style.height;
                     bar1Style.height = bar2Style.height;
                     bar2Style.height = tempHeight;
-                }, i * this.state.speed);
+                }, i * 0.1);
             }
         }
     }
@@ -141,10 +210,11 @@ export default class SortVisualizer extends React.Component{
                 const bar1Style = arrayBars[bar1Index].style;
                 const bar2Style = arrayBars[bar2Index].style;
                 const color = (animations[i].type === 'comp') ? 'red' : 'blueviolet';
+                const color2 = (animations[i].type === 'check') ? 'aquamarine' : color;
                 setTimeout(() => {
-                    bar1Style.backgroundColor = color;
-                    bar2Style.backgroundColor = color;
-                }, i * this.state.speed);
+                    bar1Style.backgroundColor = color2;
+                    bar2Style.backgroundColor = color2;
+                }, i * 0.1);
             }
             else{
                 setTimeout(() => {
@@ -154,7 +224,7 @@ export default class SortVisualizer extends React.Component{
                     const tempHeight = bar1Style.height;
                     bar1Style.height = bar2Style.height;
                     bar2Style.height = tempHeight;
-                }, i * this.state.speed);
+                }, i * 0.1);
             }
         }
 
@@ -168,7 +238,7 @@ export default class SortVisualizer extends React.Component{
                 array.push(randomIntFromInterval(-1000, 1000));
             }
             const javaScriptSortedArray = this.state.array.slice().sort((a, b) => a-b);
-            const sortedArray = sortingAlgorithms.selectionSort(this.state.array);
+            const sortedArray = sortingAlgorithms.quickSort(this.state.array);
             // console.log(javaScriptSortedArray);
             // console.log(sortedArray);
             console.log(arraysAreEqual(javaScriptSortedArray, sortedArray));
